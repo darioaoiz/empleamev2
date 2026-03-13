@@ -12,6 +12,7 @@ import Payments from './pages/Payments'
 import Admin from './pages/Admin'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import Membership from './pages/Membership'
 import './index.css'
 
 function MainLayout() {
@@ -42,6 +43,7 @@ function App() {
               <Route path="/pagos" element={<Payments />} />
               <Route path="/login" element={<Login />} />
               <Route path="/registro" element={<Register />} />
+              <Route path="/membresia" element={<Membership />} />
             </Route>
             <Route path="/admin" element={<Admin />} />
             <Route path="*" element={<Navigate to="/" replace />} />

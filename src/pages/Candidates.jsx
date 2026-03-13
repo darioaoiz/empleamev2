@@ -3,7 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { collection, getDocs, onSnapshot, query, orderBy, addDoc, serverTimestamp } from 'firebase/firestore'
 import { db } from '../firebase'
 import Modal from '../components/ui/Modal'
-import { Search, Filter, MessageCircle, FileText, ShieldCheck, MapPin, Clock, Star, Loader2, RefreshCw } from 'lucide-react'
+import { Search, Filter, MessageCircle, FileText, ShieldCheck, MapPin, Clock, Star, Loader2, RefreshCw, Lock } from 'lucide-react'
+import { useAuth } from '../context/AuthContext'
+import { useNavigate } from 'react-router-dom'
 
 const WHATSAPP = import.meta.env.VITE_WHATSAPP_NUMBER
 
@@ -218,6 +220,9 @@ function SkeletonCard() {
 
 // ── Main Page ─────────────────────────────────────────────────────────────────
 export default function Candidates() {
+  const { user, userData } = useAuth()
+  const navigate = useNavigate()
+
   const [candidates, setCandidates] = useState([])
   const [filtered, setFiltered] = useState([])
   const [loading, setLoading] = useState(true)
@@ -228,6 +233,7 @@ export default function Candidates() {
   const [modality, setModality] = useState('Todas las modalidades')
   const [specialty, setSpecialty] = useState(ALL_SPECIALTIES)
   const [cvCandidate, setCvCandidate] = useState(null)
+  const [showMembershipModal, setShowMembershipModal] = useState(false)
 
   // Derive unique specialties from live data for the dropdown
   const specialtyOptions = [
@@ -307,6 +313,14 @@ export default function Candidates() {
     setLoading(true)
     // Re-mount will re-trigger the snapshot listener
     window.location.reload()
+  }
+
+  const handleViewCV = (candidate) => {
+    if (!user || !userData?.esMiembro) {
+      setShowMembershipModal(true)
+    } else {
+      setCvCandidate(candidate)
+    }
   }
 
   return (
@@ -446,7 +460,7 @@ export default function Candidates() {
                     <CandidateCard
                       key={candidate.id}
                       candidate={candidate}
-                      onViewCV={setCvCandidate}
+                      onViewCV={handleViewCV}
                       onInterest={handleInterest}
                     />
                   ))}
@@ -466,6 +480,54 @@ export default function Candidates() {
       >
         <CVModal candidate={cvCandidate} />
       </Modal>
+
+      {/* ── Membership Modal ──────────────────────────────────────────────── */}
+      <AnimatePresence>
+        {showMembershipModal && (
+          <MembershipModal 
+            onClose={() => setShowMembershipModal(false)} 
+            onAction={() => navigate('/membresia')} 
+          />
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
+// ── Membership Modal Component ────────────────────────────────────────────────
+function MembershipModal({ onClose, onAction }) {
+  return (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-navy-900/40 backdrop-blur-sm">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        className="bg-white rounded-3xl shadow-2xl overflow-hidden w-full max-w-sm"
+      >
+        <div className="p-8 text-center">
+          <div className="w-16 h-16 bg-pink-100 text-pink-500 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Lock className="w-8 h-8" />
+          </div>
+          <h3 className="text-2xl font-black text-navy-600 mb-3">Contenido exclusivo</h3>
+          <p className="text-gray-500 mb-8 leading-relaxed">
+            Las hojas de vida son exclusivas para miembros de nuestra plataforma.
+          </p>
+          <div className="space-y-3">
+            <button
+              onClick={onAction}
+              className="w-full py-3.5 bg-pink-500 hover:bg-pink-600 text-white rounded-xl font-bold transition-colors shadow-lg shadow-pink-500/30"
+            >
+              Saber más
+            </button>
+            <button
+              onClick={onClose}
+              className="w-full py-3.5 bg-gray-50 hover:bg-gray-100 text-gray-500 rounded-xl font-bold transition-colors"
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      </motion.div>
     </div>
   )
 }
