@@ -220,7 +220,7 @@ function SkeletonCard() {
 
 // ── Main Page ─────────────────────────────────────────────────────────────────
 export default function Candidates() {
-  const { user, userData } = useAuth()
+  const { currentUser, userData } = useAuth()
   const navigate = useNavigate()
 
   const [candidates, setCandidates] = useState([])
@@ -316,7 +316,7 @@ export default function Candidates() {
   }
 
   const handleViewCV = (candidate) => {
-    if (!user || !userData?.esMiembro) {
+    if (!currentUser || !userData?.esMiembro) {
       setShowMembershipModal(true)
     } else {
       setCvCandidate(candidate)

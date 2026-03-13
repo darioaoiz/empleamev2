@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
-import { Link, NavLink, useLocation } from 'react-router-dom'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Heart } from 'lucide-react'
+import { Menu, X, Heart, LogOut } from 'lucide-react'
+import { useAuth } from '../../context/AuthContext'
 
 const navLinks = [
   { to: '/', label: 'Inicio', exact: true },
@@ -15,6 +16,17 @@ export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const location = useLocation()
+  const navigate = useNavigate()
+  const { currentUser, logout } = useAuth()
+
+  const handleLogout = async () => {
+    try {
+      await logout()
+      navigate('/')
+    } catch (error) {
+      console.error('Error logging out:', error)
+    }
+  }
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20)
@@ -74,14 +86,32 @@ export default function Navbar() {
           </nav>
 
           {/* Desktop CTA */}
-          <div className="hidden md:flex items-center gap-3">
-            <Link
-              to="/formularios"
-              className="btn-primary text-xs px-4 py-2.5"
-            >
-              <Heart className="w-3.5 h-3.5" />
-              Contratar
-            </Link>
+          <div className="hidden md:flex items-center gap-4">
+            {!currentUser ? (
+              <>
+                <Link
+                  to="/login"
+                  className="text-sm font-semibold text-gray-600 hover:text-pink-500 transition-colors"
+                >
+                  Iniciar Sesión
+                </Link>
+                <button
+                  onClick={() => navigate('/registro')}
+                  className="flex flex-row items-center justify-center gap-2 px-4 py-2.5 bg-pink-500 hover:bg-pink-600 text-white text-xs font-bold rounded-xl transition-all shadow-lg shadow-pink-500/20 hover:-translate-y-0.5"
+                >
+                  <Heart className="w-3.5 h-3.5 flex-shrink-0" />
+                  <span>¡Hazte Miembro!</span>
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 text-gray-600 hover:text-pink-500 text-sm font-semibold transition-colors"
+              >
+                <LogOut className="w-4 h-4" />
+                Cerrar Sesión
+              </button>
+            )}
           </div>
 
           {/* Mobile hamburger */}
@@ -122,13 +152,32 @@ export default function Navbar() {
                   {link.label}
                 </NavLink>
               ))}
-              <div className="pt-2">
-                <Link
-                  to="/formularios"
-                  className="btn-primary w-full justify-center text-sm"
-                >
-                  Contratar Personal
-                </Link>
+              <div className="pt-4">
+                {!currentUser ? (
+                  <div className="flex flex-row items-center gap-4 px-2">
+                    <Link
+                      to="/login"
+                      className="text-sm font-semibold text-gray-600 hover:text-pink-500 transition-colors whitespace-nowrap"
+                    >
+                      Iniciar Sesión
+                    </Link>
+                    <button
+                      onClick={() => navigate('/registro')}
+                      className="flex-1 py-3 bg-pink-500 hover:bg-pink-600 text-white text-sm font-bold rounded-xl transition-all shadow-lg shadow-pink-500/20 flex flex-row items-center justify-center gap-2"
+                    >
+                      <Heart className="w-4 h-4 flex-shrink-0" />
+                      <span>¡Hazte Miembro!</span>
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={handleLogout}
+                    className="w-full py-3 bg-gray-50 text-gray-600 hover:text-pink-500 text-sm font-bold rounded-xl flex items-center justify-center gap-2 transition-colors"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Cerrar Sesión
+                  </button>
+                )}
               </div>
             </div>
           </motion.div>

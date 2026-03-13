@@ -19,6 +19,8 @@ export default function Login() {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      // Success feedback
+      alert('¡Bienvenido de nuevo!');
       // Redirect to home or dashboard after successful login
       navigate('/');
     } catch (err) {

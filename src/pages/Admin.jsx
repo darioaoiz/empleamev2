@@ -7,6 +7,7 @@ import ContentTalento from '../components/admin/ContentTalento';
 import ContentSolicitudes from '../components/admin/ContentSolicitudes';
 import ContentGlobal from '../components/admin/ContentGlobal';
 import ContentUsuarios from '../components/admin/ContentUsuarios';
+import ContentMembresia from '../components/admin/ContentMembresia';
 
 export default function Admin() {
   const [activeTab, setActiveTab] = useState('inicio');
@@ -92,6 +93,12 @@ export default function Admin() {
               Global
             </button>
             <button 
+              onClick={() => setActiveTab('membresia')}
+              className={`pb-3 px-2 transition-colors whitespace-nowrap text-sm font-semibold ${activeTab === 'membresia' ? 'border-b-2 border-[#001f3f] text-[#001f3f]' : 'text-gray-500 hover:text-gray-700'}`}
+            >
+              Membresía
+            </button>
+            <button 
               onClick={() => setActiveTab('usuarios')}
               className={`pb-3 px-2 transition-colors whitespace-nowrap text-sm font-semibold ${activeTab === 'usuarios' ? 'border-b-2 border-[#001f3f] text-[#001f3f]' : 'text-gray-500 hover:text-gray-700'}`}
             >
@@ -108,6 +115,7 @@ export default function Admin() {
           {activeTab === 'academia' && <div className="p-12 bg-white rounded-2xl shadow-sm border border-gray-100 text-center text-gray-500 font-medium">Módulo de Academia en construcción</div>}
           {activeTab === 'pagos' && <div className="p-12 bg-white rounded-2xl shadow-sm border border-gray-100 text-center text-gray-500 font-medium">Módulo de Pagos en construcción</div>}
           {activeTab === 'global' && <ContentGlobal />}
+          {activeTab === 'membresia' && <ContentMembresia />}
           {activeTab === 'usuarios' && <ContentUsuarios />}
         </main>
       </div>

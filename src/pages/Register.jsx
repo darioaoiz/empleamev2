@@ -40,7 +40,17 @@ export default function Register() {
       navigate('/');
     } catch (err) {
       console.error(err);
-      setError('Hubo un error al crear la cuenta. Verifica tus datos e inténtalo de nuevo.');
+      let mensajeError = 'Hubo un error al crear la cuenta. Verifica tus datos e inténtalo de nuevo.';
+      
+      if (err.code === 'auth/email-already-in-use') {
+        mensajeError = 'Este correo electrónico ya está registrado. Intenta iniciar sesión.';
+      } else if (err.code === 'auth/weak-password') {
+        mensajeError = 'La contraseña es muy débil. Debe tener al menos 6 caracteres.';
+      } else if (err.code === 'auth/invalid-email') {
+        mensajeError = 'El formato del correo electrónico no es válido.';
+      }
+      
+      setError(mensajeError);
     } finally {
       setLoading(false);
     }
