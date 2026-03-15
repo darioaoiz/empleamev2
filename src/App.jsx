@@ -13,6 +13,7 @@ import Admin from './pages/Admin'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Membership from './pages/Membership'
+import Unete from './pages/Unete'
 import './index.css'
 
 function MainLayout() {
@@ -44,6 +45,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/registro" element={<Register />} />
               <Route path="/membresia" element={<Membership />} />
+              <Route path="/unete" element={<Unete />} />
             </Route>
             <Route path="/admin" element={<Admin />} />
             <Route path="*" element={<Navigate to="/" replace />} />

@@ -91,7 +91,7 @@ export default function Navbar() {
               <>
                 <Link
                   to="/login"
-                  className="text-sm font-semibold text-gray-600 hover:text-pink-500 transition-colors"
+                  className="flex items-center justify-center px-4 py-2.5 border-2 border-pink-500 bg-transparent text-pink-500 hover:bg-pink-50 text-xs font-bold rounded-xl transition-all hover:-translate-y-0.5"
                 >
                   Iniciar Sesión
                 </Link>
@@ -142,14 +142,21 @@ export default function Navbar() {
                   to={link.to}
                   end={link.exact}
                   className={({ isActive }) =>
-                    `block px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                    `block px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 relative group ${
                       isActive
-                        ? 'bg-pink-50 text-pink-500 font-semibold'
-                        : 'text-gray-600 hover:bg-gray-50 hover:text-pink-500'
+                        ? 'text-pink-500 font-semibold'
+                        : 'text-gray-600 hover:text-pink-500'
                     }`
                   }
                 >
-                  {link.label}
+                  {({ isActive }) => (
+                    <>
+                      {link.label}
+                      <span className={`absolute bottom-2 left-4 h-0.5 bg-pink-400 rounded-full transition-all duration-300 ${
+                        isActive ? 'w-8' : 'w-0'
+                      }`} />
+                    </>
+                  )}
                 </NavLink>
               ))}
               <div className="pt-4">
@@ -157,7 +164,7 @@ export default function Navbar() {
                   <div className="flex flex-row items-center gap-4 px-2">
                     <Link
                       to="/login"
-                      className="text-sm font-semibold text-gray-600 hover:text-pink-500 transition-colors whitespace-nowrap"
+                      className="flex items-center justify-center px-4 py-2.5 border-2 border-pink-500 bg-transparent text-pink-500 hover:bg-pink-50 text-xs font-bold rounded-xl transition-all whitespace-nowrap"
                     >
                       Iniciar Sesión
                     </Link>

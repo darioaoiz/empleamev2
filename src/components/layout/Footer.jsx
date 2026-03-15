@@ -8,6 +8,7 @@ const footerLinks = {
     { label: 'Ver Postulantes', to: '/postulantes' },
     { label: 'Academia', to: '/academia' },
     { label: 'Pagos', to: '/pagos' },
+    { label: 'Únete al Equipo', to: '/unete' },
   ],
 }
 

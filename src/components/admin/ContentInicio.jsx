@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { db, storage } from '../../firebase';
+import { db } from '../../firebase';
 import { Check, Edit3, Loader2 } from 'lucide-react';
 
 const ContentInicio = () => {
   const [formData, setFormData] = useState({
-    titulo_hero: '',
-    subtitulo_hero: '',
-    heroImageUrl: ''
+    titulo: '',
+    subtitulo: '',
+    boton1: '',
+    boton2: ''
   });
-  const [heroImageFile, setHeroImageFile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
@@ -18,11 +17,17 @@ const ContentInicio = () => {
   useEffect(() => {
     const fetchContenido = async () => {
       try {
-        const docRef = doc(db, 'contenido_inicio', 'hero');
+        const docRef = doc(db, 'ajustes_web', 'inicio');
         const docSnap = await getDoc(docRef);
         
         if (docSnap.exists()) {
-          setFormData(docSnap.data());
+          const data = docSnap.data();
+          setFormData({
+            titulo: data.titulo || '',
+            subtitulo: data.subtitulo || '',
+            boton1: data.boton1 || '',
+            boton2: data.boton2 || ''
+          });
         }
       } catch (error) {
         console.error("Error al cargar contenido de inicio:", error);
@@ -48,21 +53,8 @@ const ContentInicio = () => {
     setMessage('');
     
     try {
-      let currentImageUrl = formData.heroImageUrl;
-      if (heroImageFile) {
-        setMessage('Subiendo imagen...');
-        const imageRef = ref(storage, 'assets/hero/imagen-hero.jpg');
-        await uploadBytes(imageRef, heroImageFile);
-        currentImageUrl = await getDownloadURL(imageRef);
-      }
-
-      const dataToSave = {
-        ...formData,
-        heroImageUrl: currentImageUrl
-      };
-
-      const docRef = doc(db, 'contenido_inicio', 'hero');
-      await setDoc(docRef, dataToSave, { merge: true });
+      const docRef = doc(db, 'ajustes_web', 'inicio');
+      await setDoc(docRef, formData, { merge: true });
       setMessage('¡Textos actualizados correctamente!');
       alert('¡Cambios guardados con éxito!');
       setTimeout(() => setMessage(''), 3000);
@@ -86,57 +78,69 @@ const ContentInicio = () => {
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 max-w-2xl mx-auto">
       <div className="flex items-center gap-3 mb-6 border-b pb-4">
         <Edit3 className="w-6 h-6 text-gray-700" />
-        <h2 className="text-xl font-bold text-[#001f3f]">Editor de Inicio (Hero)</h2>
+        <h2 className="text-xl font-bold text-[#001f3f]">Editor de Portada</h2>
       </div>
 
       <form onSubmit={handleSave} className="space-y-6">
         <div>
-          <label htmlFor="titulo_hero" className="block text-sm font-medium text-gray-700 mb-1">
-            Título Principal (Hero)
+          <label htmlFor="titulo" className="block text-sm font-medium text-gray-700 mb-1">
+            Título Principal
           </label>
           <input
             type="text"
-            id="titulo_hero"
-            name="titulo_hero"
-            value={formData.titulo_hero}
+            id="titulo"
+            name="titulo"
+            value={formData.titulo}
             onChange={handleChange}
-            placeholder="Ej: Empleadas domésticas y cuidado del hogar"
+            placeholder="Ej: El personal de confianza que tu hogar merece"
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#001f3f] focus:border-[#001f3f] outline-none transition-shadow"
           />
         </div>
 
         <div>
-          <label htmlFor="subtitulo_hero" className="block text-sm font-medium text-gray-700 mb-1">
-            Subtítulo (Hero)
+          <label htmlFor="subtitulo" className="block text-sm font-medium text-gray-700 mb-1">
+            Subtítulo
           </label>
           <textarea
-            id="subtitulo_hero"
-            name="subtitulo_hero"
-            value={formData.subtitulo_hero}
+            id="subtitulo"
+            name="subtitulo"
+            value={formData.subtitulo}
             onChange={handleChange}
-            placeholder="Encuentra al personal doméstico ideal con confianza..."
+            placeholder="Ej: Conectamos familias y empresas bolivianas..."
             rows="3"
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#001f3f] focus:border-[#001f3f] outline-none transition-shadow resize-none"
           ></textarea>
         </div>
 
-        <div>
-          <label htmlFor="heroImageFile" className="block text-sm font-medium text-gray-700 mb-1">
-            Imagen Principal (Hero)
-          </label>
-          {formData.heroImageUrl && (
-            <div className="mb-3">
-              <p className="text-xs text-gray-500 mb-1">Imagen actual:</p>
-              <img src={formData.heroImageUrl} alt="Hero actual" className="w-48 h-32 object-cover rounded-xl border border-gray-200 shadow-sm" />
-            </div>
-          )}
-          <input
-            type="file"
-            id="heroImageFile"
-            accept="image/*"
-            onChange={(e) => setHeroImageFile(e.target.files[0])}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#001f3f] focus:border-[#001f3f] outline-none transition-shadow file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-pink-50 file:text-pink-600 hover:file:bg-pink-100"
-          />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label htmlFor="boton1" className="block text-sm font-medium text-gray-700 mb-1">
+              Texto Botón 1
+            </label>
+            <input
+              type="text"
+              id="boton1"
+              name="boton1"
+              value={formData.boton1}
+              onChange={handleChange}
+              placeholder="Ej: Contratar Personal"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#001f3f] focus:border-[#001f3f] outline-none transition-shadow"
+            />
+          </div>
+          <div>
+            <label htmlFor="boton2" className="block text-sm font-medium text-gray-700 mb-1">
+              Texto Botón 2
+            </label>
+            <input
+              type="text"
+              id="boton2"
+              name="boton2"
+              value={formData.boton2}
+              onChange={handleChange}
+              placeholder="Ej: Buscar Trabajo"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#001f3f] focus:border-[#001f3f] outline-none transition-shadow"
+            />
+          </div>
         </div>
 
         {message && (
@@ -156,7 +160,7 @@ const ContentInicio = () => {
             ) : (
               <Check className="w-4 h-4" />
             )}
-            {saving ? 'Guardando...' : 'Guardar Cambios'}
+            {saving ? 'Guardando...' : 'Guardar'}
           </button>
         </div>
       </form>
@@ -165,3 +169,4 @@ const ContentInicio = () => {
 };
 
 export default ContentInicio;
+

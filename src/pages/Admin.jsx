@@ -10,7 +10,7 @@ import ContentUsuarios from '../components/admin/ContentUsuarios';
 import ContentMembresia from '../components/admin/ContentMembresia';
 
 export default function Admin() {
-  const [activeTab, setActiveTab] = useState('inicio');
+  const [activeTab, setActiveTab] = useState('editor');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
 
@@ -51,10 +51,10 @@ export default function Admin() {
         <div className="px-6 border-b border-gray-100 bg-gray-50/50">
           <nav className="flex gap-6 overflow-x-auto pt-4">
             <button 
-              onClick={() => setActiveTab('inicio')}
-              className={`pb-3 px-2 transition-colors whitespace-nowrap text-sm font-semibold ${activeTab === 'inicio' ? 'border-b-2 border-[#001f3f] text-[#001f3f]' : 'text-gray-500 hover:text-gray-700'}`}
+              onClick={() => setActiveTab('editor')}
+              className={`pb-3 px-2 transition-colors whitespace-nowrap text-sm font-semibold ${activeTab === 'editor' ? 'border-b-2 border-[#001f3f] text-[#001f3f]' : 'text-gray-500 hover:text-gray-700'}`}
             >
-              Inicio
+              Editor Visual
             </button>
             <button 
               onClick={() => setActiveTab('formularios')}
@@ -98,6 +98,7 @@ export default function Admin() {
             >
               Membresía
             </button>
+
             <button 
               onClick={() => setActiveTab('usuarios')}
               className={`pb-3 px-2 transition-colors whitespace-nowrap text-sm font-semibold ${activeTab === 'usuarios' ? 'border-b-2 border-[#001f3f] text-[#001f3f]' : 'text-gray-500 hover:text-gray-700'}`}
@@ -108,7 +109,7 @@ export default function Admin() {
         </div>
         
         <main className="p-8 flex-grow bg-gray-50/20">
-          {activeTab === 'inicio' && <ContentInicio />}
+          {activeTab === 'editor' && <ContentInicio />}
           {activeTab === 'formularios' && <ContentFormularios />}
           {activeTab === 'talento' && <ContentTalento />}
           {activeTab === 'solicitudes' && <ContentSolicitudes />}
