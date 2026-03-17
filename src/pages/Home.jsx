@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 
 // --- ANIMACIONES (Arreglo definitivo del error stagger) ---
 const fadeInUp = {
@@ -18,33 +21,44 @@ const stagger = {
 
 const Home = () => {
   const [heroData, setHeroData] = useState(null);
-  const [section2Data, setSection2Data] = useState(null);
+  const [serviciosData, setServiciosData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [res1, res2] = await Promise.all([
-          fetch('https://empleame-backend.onrender.com/api/hero'),
-          fetch('https://empleame-backend.onrender.com/api/section2')
-        ]);
+        // Cargar Hero
+        const heroRef = doc(db, 'ajustes_home', 'hero');
+        const heroSnap = await getDoc(heroRef);
+        
+        if (heroSnap.exists()) {
+          setHeroData(heroSnap.data());
+        } else {
+          setHeroData({
+            titulo: "El personal de confianza que tu hogar merece",
+            subtitulo: "Conectamos a familias y empresas bolivianas con el mejor personal doméstico y empresarial. Verificado, legal y con garantía.",
+            imagenUrl: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80"
+          });
+        }
 
-        const data1 = await res1.json();
-        const data2 = await res2.json();
-
-        if (data1) setHeroData(data1);
-        if (data2) setSection2Data(data2);
+        // Cargar Servicios
+        const servRef = doc(db, 'ajustes_home', 'servicios');
+        const servSnap = await getDoc(servRef);
+        
+        if (servSnap.exists()) {
+          const data = servSnap.data();
+          if (Array.isArray(data.lista)) {
+            setServiciosData(data.lista);
+          }
+        } else {
+          // Defaults si no hay en DB
+          setServiciosData([
+            { id: 'hogar', titulo: 'Gestión Hogar', descripcion: 'El personal ideal para el cuidado de tu familia y el mantenimiento de tu hogar.', botonTexto: 'Solicitar Personal' },
+            { id: 'empresa', titulo: 'Gestión Empresa', descripcion: 'Soluciones profesionales de limpieza, asistencia y personal especializado para tu oficina o negocio.', botonTexto: 'Solicitar Personal' }
+          ]);
+        }
       } catch (err) {
-        console.log("Servidor lento, activando Datos de Rescate...");
-        setHeroData({
-          titulo: "Impulsa tu Carrera Profesional",
-          subtitulo: "Conectamos tu talento con las mejores oportunidades.",
-          imagen: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80"
-        });
-        setSection2Data({
-          titulo: "Nuestros Servicios",
-          subtitulo: "Soluciones a medida para empresas y profesionales."
-        });
+        console.error("Error al cargar datos desde Firestore:", err);
       } finally {
         setLoading(false);
       }
@@ -63,8 +77,7 @@ const Home = () => {
     );
   }
 
-  const { titulo, subtitulo, imagen } = heroData;
-  const { titulo: titulo2, subtitulo: subtitulo2 } = section2Data || {};
+  const { titulo, subtitulo, imagenUrl } = heroData;
 
   return (
     <motion.div initial="initial" animate="animate" className="bg-white text-gray-900 min-h-screen">
@@ -77,21 +90,21 @@ const Home = () => {
                 ● Agencia disponible ahora
               </motion.div>
               
-              <motion.h1 variants={fadeInUp} className="text-4xl md:text-6xl font-bold text-[#001f3f] leading-tight">
-                El personal de confianza que tu hogar merece
+              <motion.h1 variants={fadeInUp} className="text-4xl md:text-6xl font-bold text-navy-950 leading-tight">
+                {titulo}
               </motion.h1>
 
               <motion.p variants={fadeInUp} className="text-lg text-gray-700 leading-relaxed max-w-xl">
-                Conectamos a familias y empresas bolivianas con el mejor personal doméstico y empresarial. <strong>Verificado, legal y con garantía.</strong>
+                {subtitulo}
               </motion.p>
             </div>
-            <motion.div variants={fadeInUp} className="flex flex-wrap gap-4 mt-8">
-              <button className="px-8 py-4 bg-[#001f3f] text-white rounded-full font-bold hover:bg-[#002b56] transition-all shadow-lg hover:-translate-y-1">
+            <motion.div variants={stagger} className="flex flex-wrap gap-4 mt-8">
+              <Link to="/formularios" className="px-8 py-4 bg-blue-600 text-white rounded-full font-bold hover:bg-blue-700 transition-all shadow-lg hover:-translate-y-1">
                 Contratar Personal
-              </button>
-              <button className="px-8 py-4 bg-white border border-pink-200 text-[#001f3f] rounded-full font-bold hover:bg-pink-50 transition-all shadow-sm hover:-translate-y-1">
+              </Link>
+              <Link to="/unete" className="px-8 py-4 bg-white border border-pink-200 text-navy-950 rounded-full font-bold hover:bg-pink-50 transition-all shadow-sm hover:-translate-y-1">
                 Buscar Trabajo
-              </button>
+              </Link>
             </motion.div>
 
             <motion.div variants={fadeInUp} className="flex items-center gap-3 mt-10">
@@ -110,14 +123,14 @@ const Home = () => {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="relative order-1 lg:order-2"
+            className="relative order-1 lg:order-2 flex justify-center lg:justify-end h-full"
           >
             {/* Columna Derecha */}
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white w-full max-w-md aspect-[9/16] lg:aspect-auto lg:h-[650px]">
               <img 
-                src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80" 
+                src={imagenUrl || "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80"} 
                 alt="Personal de confianza" 
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover rounded-2xl shadow-inner"
               />
               
               {/* Tarjeta Flotante: Calificación */}
@@ -127,7 +140,7 @@ const Home = () => {
                 transition={{ delay: 0.5, duration: 0.5 }}
                 className="absolute top-6 right-6 bg-white p-4 shadow-xl rounded-2xl flex flex-col items-center gap-1 border border-pink-50"
               >
-                <span className="text-xl font-bold text-[#001f3f]">4.9</span>
+                <span className="text-xl font-bold text-navy-950">4.9</span>
                 <div className="text-yellow-400 text-xs">⭐⭐⭐⭐⭐</div>
                 <span className="text-[10px] text-gray-500 uppercase font-semibold">Calificación</span>
               </motion.div>
@@ -145,7 +158,7 @@ const Home = () => {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-[#001f3f]">Personal 100%</p>
+                  <p className="text-sm font-bold text-navy-950">Personal 100%</p>
                   <p className="text-xs text-green-600 font-semibold">Verificado</p>
                 </div>
               </motion.div>
@@ -183,48 +196,39 @@ const Home = () => {
 
       <section className="py-20 bg-gray-50">
         <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-4xl font-bold text-[#001f3f] text-center mb-16">
+          <h2 className="text-4xl font-bold text-navy-950 text-center mb-16">
             Servicios a tu medida
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Contenedor 1 - Gestión Hogar */}
-            <div className="bg-white rounded-3xl shadow-sm p-10 flex flex-col items-center text-center space-y-6 hover:shadow-md transition-shadow">
-              <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center text-pink-600">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
-              </div>
-              
-              <h3 className="text-2xl font-bold text-[#001f3f]">Gestión Hogar</h3>
-              
-              <p className="text-gray-600">
-                El personal ideal para el cuidado de tu familia y el mantenimiento de tu hogar.
-              </p>
+            {serviciosData?.map((servicio) => {
+              const isHogar = servicio.id === 'hogar';
+              return (
+                <div key={servicio.id} className="bg-white rounded-3xl shadow-sm p-10 flex flex-col items-center text-center space-y-6 hover:shadow-md transition-shadow">
+                  <div className={`w-16 h-16 ${isHogar ? 'bg-pink-100 text-pink-600' : 'bg-blue-100 text-blue-600'} rounded-full flex items-center justify-center`}>
+                    {isHogar ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                      </svg>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                      </svg>
+                    )}
+                  </div>
+                  
+                  <h3 className="text-2xl font-bold text-navy-950">{servicio.titulo}</h3>
+                  
+                  <p className="text-gray-600">
+                    {servicio.descripcion}
+                  </p>
 
-              <button className="px-8 py-3 bg-[#001f3f] text-white rounded-full font-bold shadow-md hover:bg-[#002b56] transition-all hover:-translate-y-1">
-                Solicitar Personal
-              </button>
-            </div>
-
-            {/* Contenedor 2 - Gestión Empresa */}
-            <div className="bg-white rounded-3xl shadow-sm p-10 flex flex-col items-center text-center space-y-6 hover:shadow-md transition-shadow">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                </svg>
-              </div>
-              
-              <h3 className="text-2xl font-bold text-[#001f3f]">Gestión Empresa</h3>
-              
-              <p className="text-gray-600">
-                Soluciones profesionales de limpieza, asistencia y personal especializado para tu oficina o negocio.
-              </p>
-
-              <button className="px-8 py-3 bg-[#001f3f] text-white rounded-full font-bold shadow-md hover:bg-[#002b56] transition-all hover:-translate-y-1">
-                Solicitar Personal
-              </button>
-            </div>
+                  <Link to={`/formularios#${servicio.id}`} className={`px-8 py-3 ${isHogar ? 'bg-pink-500 hover:bg-pink-600' : 'bg-blue-600 hover:bg-blue-700'} text-white rounded-full font-bold shadow-md transition-all hover:-translate-y-1`}>
+                    {servicio.botonTexto}
+                  </Link>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -232,7 +236,7 @@ const Home = () => {
       <section className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16 px-4">
-            <h2 className="text-4xl font-bold text-[#001f3f] mb-4">
+            <h2 className="text-4xl font-bold text-navy-950 mb-4">
               Talentos Destacados
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
@@ -253,7 +257,7 @@ const Home = () => {
                     />
                   </div>
                   <div>
-                    <h4 className="text-lg font-bold text-[#001f3f]">Ariana Ortiz</h4>
+                    <h4 className="text-lg font-bold text-navy-950">Ariana Ortiz</h4>
                     <p className="text-sm text-gray-500">Niñera / Babysitter</p>
                   </div>
                 </div>
@@ -303,7 +307,7 @@ const Home = () => {
                     />
                   </div>
                   <div>
-                    <h4 className="text-lg font-bold text-[#001f3f]">Carlos Méndez</h4>
+                    <h4 className="text-lg font-bold text-navy-950">Carlos Méndez</h4>
                     <p className="text-sm text-gray-500">Chofer / Mensajero</p>
                   </div>
                 </div>
@@ -354,7 +358,7 @@ const Home = () => {
                     />
                   </div>
                   <div>
-                    <h4 className="text-lg font-bold text-[#001f3f]">María Luz</h4>
+                    <h4 className="text-lg font-bold text-navy-950">María Luz</h4>
                     <p className="text-sm text-gray-500">Cocina Saludable</p>
                   </div>
                 </div>
@@ -399,7 +403,7 @@ const Home = () => {
       <section className="py-24 bg-slate-50">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-[#001f3f] mb-4">Academia Empleâme</h2>
+            <h2 className="text-4xl font-bold text-navy-950 mb-4">Academia Empleâme</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
               Capacitamos a nuestro personal para garantizar la excelencia en cada servicio.
             </p>
@@ -419,11 +423,11 @@ const Home = () => {
                 <span className="inline-block px-3 py-1 bg-green-50 text-green-600 text-xs font-bold rounded-lg uppercase tracking-wider">
                   Certificado Incluido
                 </span>
-                <h3 className="text-2xl font-bold text-[#001f3f]">Primeros Auxilios para el Hogar</h3>
+                <h3 className="text-2xl font-bold text-navy-950">Primeros Auxilios para el Hogar</h3>
                 <p className="text-gray-600">
                   Capacitación vital para reaccionar ante emergencias domésticas, garantizando la máxima seguridad para tu familia.
                 </p>
-                <button className="px-6 py-3 bg-[#001f3f] text-white rounded-full font-bold hover:bg-[#002b56] transition-all">
+                <button className="px-6 py-3 bg-blue-600 text-white rounded-full font-bold hover:bg-blue-700 transition-all">
                   Ver detalles
                 </button>
               </div>
@@ -442,11 +446,11 @@ const Home = () => {
                 <span className="inline-block px-3 py-1 bg-pink-50 text-pink-600 text-xs font-bold rounded-lg uppercase tracking-wider">
                   Curso Premium
                 </span>
-                <h3 className="text-2xl font-bold text-[#001f3f]">Etiqueta, Protocolo y Servicio</h3>
+                <h3 className="text-2xl font-bold text-navy-950">Etiqueta, Protocolo y Servicio</h3>
                 <p className="text-gray-600">
                   Excelencia en el trato al cliente, modales y organización profesional para personal de alto nivel.
                 </p>
-                <button className="px-6 py-3 bg-[#001f3f] text-white rounded-full font-bold hover:bg-[#002b56] transition-all">
+                <button className="px-6 py-3 bg-blue-600 text-white rounded-full font-bold hover:bg-blue-700 transition-all">
                   Ver detalles
                 </button>
               </div>
@@ -457,7 +461,7 @@ const Home = () => {
 
       <section className="py-24 bg-white">
         <div className="max-w-6xl mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold text-[#001f3f] mb-4">Tu tranquilidad en 3 simples pasos</h2>
+          <h2 className="text-4xl font-bold text-navy-950 mb-4">Tu tranquilidad en 3 simples pasos</h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
             Un proceso transparente diseñado para tu seguridad y la de tu familia.
           </p>
@@ -468,7 +472,7 @@ const Home = () => {
               <div className="w-20 h-20 bg-pink-100 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                 <span className="text-3xl font-serif font-bold text-pink-600">1</span>
               </div>
-              <h3 className="text-xl font-bold text-[#001f3f] mb-4">Elige tu perfil</h3>
+              <h3 className="text-xl font-bold text-navy-950 mb-4">Elige tu perfil</h3>
               <p className="text-gray-600">
                 Explora nuestra base de talentos verificados y selecciona los que mejor se adapten a tu hogar.
               </p>
@@ -479,7 +483,7 @@ const Home = () => {
               <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                 <span className="text-3xl font-serif font-bold text-blue-600">2</span>
               </div>
-              <h3 className="text-xl font-bold text-[#001f3f] mb-4">Entrevista y verifica</h3>
+              <h3 className="text-xl font-bold text-navy-950 mb-4">Entrevista y verifica</h3>
               <p className="text-gray-600">
                 Coordina una cita y revisa sus certificaciones de la Academia Empleâme con total transparencia.
               </p>
@@ -490,7 +494,7 @@ const Home = () => {
               <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                 <span className="text-3xl font-serif font-bold text-green-600">3</span>
               </div>
-              <h3 className="text-xl font-bold text-[#001f3f] mb-4">Contrata con seguridad</h3>
+              <h3 className="text-xl font-bold text-navy-950 mb-4">Contrata con seguridad</h3>
               <p className="text-gray-600">
                 Finaliza el proceso con el respaldo de nuestra garantía de sustitución y soporte constante.
               </p>
@@ -501,10 +505,10 @@ const Home = () => {
 
       {/* Hero CTA Finale */}
       <section className="pb-24 px-4 md:px-6">
-        <div className="max-w-6xl mx-auto bg-[#001f3f] rounded-[2rem] md:rounded-[3rem] p-10 md:p-20 text-center relative overflow-hidden shadow-2xl">
+        <div className="max-w-6xl mx-auto bg-navy-900 rounded-[2rem] md:rounded-[3rem] p-10 md:p-20 text-center relative overflow-hidden shadow-2xl">
           {/* Decoración de fondo */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-pink-500/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl -ml-32 -mb-32"></div>
+          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-400/10 rounded-full blur-3xl -ml-32 -mb-32"></div>
           
           <div className="relative z-10">
             <h2 className="text-3xl md:text-5xl font-bold text-white mb-8 leading-tight">
@@ -513,7 +517,7 @@ const Home = () => {
             <p className="text-blue-100/80 text-lg mb-12 max-w-xl mx-auto">
               Únete a las cientos de familias que ya confían en Empleâme para gestionar su personal de confianza.
             </p>
-            <button className="px-10 py-5 bg-pink-500 text-white rounded-full font-bold text-lg hover:bg-pink-600 transition-all shadow-xl shadow-pink-900/20 hover:-translate-y-1 active:scale-95">
+            <button className="px-10 py-5 bg-blue-600 text-white rounded-full font-bold text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-900/20 hover:-translate-y-1 active:scale-95">
               Comenzar Ahora
             </button>
           </div>

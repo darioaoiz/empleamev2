@@ -47,7 +47,7 @@ export default function Membership() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16"
         >
-          <h1 className="text-4xl md:text-5xl font-black text-navy-600 mb-4">Membresía Premium</h1>
+          <h1 className="text-4xl md:text-5xl font-black text-navy-950 mb-4">Membresía Premium</h1>
           <p className="text-gray-500 text-lg md:text-xl max-w-2xl mx-auto font-medium">
             Acceso ilimitado a hojas de vida, contactos directos y talento verificado para tu hogar.
           </p>
@@ -67,10 +67,10 @@ export default function Membership() {
               </span>
             </div>
             
-            <h2 className="text-2xl font-black text-navy-600 mb-2">Plan Acceso Total</h2>
+            <h2 className="text-2xl font-black text-navy-950 mb-2">Plan Acceso Total</h2>
             
             <div className="flex items-baseline gap-1 mb-8">
-              <span className="text-4xl font-black text-navy-600">{precio} Bs</span>
+              <span className="text-4xl font-black text-navy-950">{precio} Bs</span>
               <span className="text-gray-400 font-medium">/ mes</span>
             </div>
 
@@ -139,7 +139,7 @@ export default function Membership() {
                 href={WHATSAPP_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-8 flex items-center justify-center gap-3 w-full py-4 bg-pink-500 hover:bg-pink-600 text-white rounded-2xl font-black transition-all shadow-lg shadow-pink-500/30 hover:-translate-y-1 active:scale-95"
+                className="mt-8 flex items-center justify-center gap-3 w-full py-4 bg-green-500 hover:bg-green-600 text-white rounded-2xl font-black transition-all shadow-lg shadow-green-500/30 hover:-translate-y-1 active:scale-95"
               >
                 <MessageCircle className="w-5 h-5" />
                 Enviar comprobante por WhatsApp

@@ -85,7 +85,7 @@ const ContentMembresia = () => {
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 max-w-2xl mx-auto">
       <div className="flex items-center gap-3 mb-6 border-b pb-4">
         <CreditCard className="w-6 h-6 text-pink-500" />
-        <h2 className="text-xl font-bold text-[#001f3f]">Ajustes de Membresía</h2>
+        <h2 className="text-xl font-bold text-navy-950">Ajustes de Membresía</h2>
       </div>
 
       <form onSubmit={handleSave} className="space-y-6">

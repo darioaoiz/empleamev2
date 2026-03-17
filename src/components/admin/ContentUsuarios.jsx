@@ -59,7 +59,7 @@ export default function ContentUsuarios() {
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
       <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-        <h2 className="text-xl font-bold text-[#001f3f] flex items-center gap-2">
+        <h2 className="text-xl font-bold text-navy-950 flex items-center gap-2">
           <Users className="w-6 h-6 text-pink-500" />
           Gestión de Usuarios
         </h2>
@@ -90,7 +90,7 @@ export default function ContentUsuarios() {
                 <tr key={user.id} className="hover:bg-gray-50/30 transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-[#001f3f]">
+                      <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-navy-950">
                         <User className="w-5 h-5" />
                       </div>
                       <span className="font-semibold text-gray-700">{user.nombre || 'Sin nombre'}</span>

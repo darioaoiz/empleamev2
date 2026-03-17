@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Heart, LogOut } from 'lucide-react'
+import { Menu, X, Heart, LogOut, ChevronDown } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 
 const navLinks = [
   { to: '/', label: 'Inicio', exact: true },
   { to: '/formularios', label: 'Formularios' },
-  { to: '/postulantes', label: 'Postulantes' },
+  { label: 'Postulantes', isDropdown: true, subLinks: [
+    { to: '/postulantes', label: 'Ver Postulantes' },
+    { to: '/unete', label: 'Únete al Equipo' },
+  ]},
   { to: '/academia', label: 'Academia' },
   { to: '/pagos', label: 'Pagos' },
 ]
@@ -15,6 +18,7 @@ const navLinks = [
 export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
   const { currentUser, logout } = useAuth()
@@ -51,7 +55,7 @@ export default function Navbar() {
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-pink-300 rounded-full" />
             </div>
             <div className="leading-none">
-              <span className="font-black text-xl text-navy-600 tracking-tight">
+              <span className="font-black text-xl text-blue-600 tracking-tight">
                 EMPLE<span className="text-pink-500">â</span>ME
               </span>
               <p className="text-[9px] font-semibold text-gray-400 tracking-widest uppercase mt-0.5">
@@ -63,25 +67,59 @@ export default function Navbar() {
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
-              <NavLink
-                key={link.to}
-                to={link.to}
-                end={link.exact}
-                className={({ isActive }) =>
-                  `text-sm font-medium transition-all duration-200 px-1 py-0.5 relative group ${
-                    isActive ? 'text-pink-500 font-semibold' : 'text-gray-600 hover:text-pink-500'
-                  }`
-                }
-              >
-                {({ isActive }) => (
-                  <>
+              link.isDropdown ? (
+                <div 
+                  key={link.label}
+                  className="relative group py-2"
+                  onMouseEnter={() => setDropdownOpen(true)}
+                  onMouseLeave={() => setDropdownOpen(false)}
+                >
+                  <button className="flex items-center gap-1 text-sm font-medium text-gray-600 hover:text-pink-500 transition-all">
                     {link.label}
-                    <span className={`absolute -bottom-1 left-0 h-0.5 bg-pink-400 rounded-full transition-all duration-300 ${
-                      isActive ? 'w-full' : 'w-0 group-hover:w-full'
-                    }`} />
-                  </>
-                )}
-              </NavLink>
+                    <ChevronDown className={`w-4 h-4 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  <AnimatePresence>
+                    {dropdownOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        className="absolute left-0 mt-2 w-48 bg-white rounded-2xl shadow-xl border border-pink-50 overflow-hidden z-50"
+                      >
+                        {link.subLinks.map((sub) => (
+                          <Link
+                            key={sub.to}
+                            to={sub.to}
+                            className="block px-5 py-3 text-sm text-navy-950 hover:bg-pink-50 hover:text-pink-500 transition-colors"
+                          >
+                            {sub.label}
+                          </Link>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ) : (
+                <NavLink
+                  key={link.to}
+                  to={link.to}
+                  end={link.exact}
+                  className={({ isActive }) =>
+                    `text-sm font-medium transition-all duration-200 px-1 py-0.5 relative group ${
+                      isActive ? 'text-pink-500 font-semibold' : 'text-gray-600 hover:text-pink-500'
+                    }`
+                  }
+                >
+                  {({ isActive }) => (
+                    <>
+                      {link.label}
+                      <span className={`absolute -bottom-1 left-0 h-0.5 bg-pink-400 rounded-full transition-all duration-300 ${
+                        isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                      }`} />
+                    </>
+                  )}
+                </NavLink>
+              )
             ))}
           </nav>
 
@@ -91,7 +129,7 @@ export default function Navbar() {
               <>
                 <Link
                   to="/login"
-                  className="flex items-center justify-center px-4 py-2.5 border-2 border-pink-500 bg-transparent text-pink-500 hover:bg-pink-50 text-xs font-bold rounded-xl transition-all hover:-translate-y-0.5"
+                  className="flex items-center justify-center px-4 py-2.5 bg-pink-500 hover:bg-pink-600 text-white text-xs font-bold rounded-xl transition-all shadow-lg shadow-pink-500/20 hover:-translate-y-0.5"
                 >
                   Iniciar Sesión
                 </Link>
@@ -106,7 +144,7 @@ export default function Navbar() {
             ) : (
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 text-gray-600 hover:text-pink-500 text-sm font-semibold transition-colors"
+                className="flex items-center gap-2 px-4 py-2.5 bg-pink-500 hover:bg-pink-600 text-white text-sm font-semibold rounded-xl transition-all shadow-lg shadow-pink-500/20 hover:-translate-y-0.5"
               >
                 <LogOut className="w-4 h-4" />
                 Cerrar Sesión
@@ -137,34 +175,55 @@ export default function Navbar() {
           >
             <div className="px-4 py-4 space-y-1">
               {navLinks.map((link) => (
-                <NavLink
-                  key={link.to}
-                  to={link.to}
-                  end={link.exact}
-                  className={({ isActive }) =>
-                    `block px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 relative group ${
-                      isActive
-                        ? 'text-pink-500 font-semibold'
-                        : 'text-gray-600 hover:text-pink-500'
-                    }`
-                  }
-                >
-                  {({ isActive }) => (
-                    <>
+                link.isDropdown ? (
+                  <div key={link.label} className="space-y-1">
+                    <div className="px-4 py-2 text-xs font-bold text-gray-400 uppercase tracking-widest">
                       {link.label}
-                      <span className={`absolute bottom-2 left-4 h-0.5 bg-pink-400 rounded-full transition-all duration-300 ${
-                        isActive ? 'w-8' : 'w-0'
-                      }`} />
-                    </>
-                  )}
-                </NavLink>
+                    </div>
+                    {link.subLinks.map((sub) => (
+                      <NavLink
+                        key={sub.to}
+                        to={sub.to}
+                        className={({ isActive }) =>
+                          `block px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                            isActive ? 'text-pink-500 bg-pink-50' : 'text-gray-600 hover:bg-gray-50'
+                          }`
+                        }
+                      >
+                        {sub.label}
+                      </NavLink>
+                    ))}
+                  </div>
+                ) : (
+                  <NavLink
+                    key={link.to}
+                    to={link.to}
+                    end={link.exact}
+                    className={({ isActive }) =>
+                      `block px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 relative group ${
+                        isActive
+                          ? 'text-pink-500 font-semibold'
+                          : 'text-gray-600 hover:text-pink-500'
+                      }`
+                    }
+                  >
+                    {({ isActive }) => (
+                      <>
+                        {link.label}
+                        <span className={`absolute bottom-2 left-4 h-0.5 bg-pink-400 rounded-full transition-all duration-300 ${
+                          isActive ? 'w-8' : 'w-0'
+                        }`} />
+                      </>
+                    )}
+                  </NavLink>
+                )
               ))}
               <div className="pt-4">
                 {!currentUser ? (
                   <div className="flex flex-row items-center gap-4 px-2">
                     <Link
                       to="/login"
-                      className="flex items-center justify-center px-4 py-2.5 border-2 border-pink-500 bg-transparent text-pink-500 hover:bg-pink-50 text-xs font-bold rounded-xl transition-all whitespace-nowrap"
+                      className="flex items-center justify-center px-4 py-2.5 bg-pink-500 hover:bg-pink-600 text-white shadow-lg shadow-pink-500/20 text-xs font-bold rounded-xl transition-all whitespace-nowrap"
                     >
                       Iniciar Sesión
                     </Link>
@@ -179,7 +238,7 @@ export default function Navbar() {
                 ) : (
                   <button
                     onClick={handleLogout}
-                    className="w-full py-3 bg-gray-50 text-gray-600 hover:text-pink-500 text-sm font-bold rounded-xl flex items-center justify-center gap-2 transition-colors"
+                    className="w-full py-3 bg-pink-500 hover:bg-pink-600 text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-pink-500/20 transition-colors"
                   >
                     <LogOut className="w-4 h-4" />
                     Cerrar Sesión

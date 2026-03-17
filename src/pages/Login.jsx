@@ -39,7 +39,7 @@ export default function Login() {
         className="max-w-md w-full space-y-8 bg-white p-8 md:p-10 rounded-3xl shadow-soft-lg border border-pink-100"
       >
         <div>
-          <h2 className="text-center text-3xl font-black text-navy-600">
+          <h2 className="text-center text-3xl font-black text-navy-950">
             Iniciar Sesión
           </h2>
           <p className="mt-2 text-center text-sm text-gray-500">
@@ -93,7 +93,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-navy-600 hover:bg-navy-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-navy-500 shadow-md transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-pink-500 hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 shadow-md transition-all disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />

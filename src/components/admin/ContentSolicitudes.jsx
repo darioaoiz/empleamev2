@@ -48,8 +48,8 @@ const ContentSolicitudes = () => {
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 max-w-6xl mx-auto">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 border-b pb-4">
         <div className="flex items-center gap-3">
-          <Users className="w-6 h-6 text-[#001f3f]" />
-          <h2 className="text-xl font-bold text-[#001f3f]">Gestión de Solicitudes</h2>
+          <Users className="w-6 h-6 text-navy-950" />
+          <h2 className="text-xl font-bold text-navy-950">Gestión de Solicitudes</h2>
         </div>
         
         <div className="flex bg-gray-100 p-1 rounded-xl">
@@ -70,7 +70,7 @@ const ContentSolicitudes = () => {
 
       {loading ? (
         <div className="flex justify-center items-center py-12">
-          <Loader2 className="w-8 h-8 text-[#001f3f] animate-spin" />
+          <Loader2 className="w-8 h-8 text-navy-950 animate-spin" />
         </div>
       ) : tab === 'reclutamiento' ? (
         // TAB RECLUTAMIENTO
@@ -89,7 +89,7 @@ const ContentSolicitudes = () => {
           ) : (
             <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
               <table className="w-full text-left text-sm text-gray-700 border-collapse">
-                <thead className="bg-[#001f3f] text-white">
+                <thead className="bg-navy-950 text-white">
                   <tr>
                     <th className="px-4 py-4 font-medium">Foto</th>
                     <th className="px-4 py-4 font-medium">Candidato</th>
@@ -119,7 +119,7 @@ const ContentSolicitudes = () => {
                         )}
                       </td>
                       <td className="px-4 py-4">
-                        <div className="font-bold text-[#001f3f]">{s.nombre}</div>
+                        <div className="font-bold text-navy-950">{s.nombre}</div>
                         <div className="text-[10px] text-gray-400 uppercase tracking-wider">{formatDate(s.fechaSolicitud)}</div>
                       </td>
                       <td className="px-4 py-4">
@@ -181,7 +181,7 @@ const ContentSolicitudes = () => {
           ) : (
             <div className="overflow-x-auto rounded-xl border border-gray-200">
               <table className="w-full text-left text-sm text-gray-700">
-                <thead className="bg-[#001f3f] text-white">
+                <thead className="bg-navy-950 text-white">
                   <tr>
                     <th className="px-6 py-4 font-medium">Fecha</th>
                     <th className="px-6 py-4 font-medium">Interesado</th>
@@ -195,7 +195,7 @@ const ContentSolicitudes = () => {
                       <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         {formatDate(s.fechaSolicitud)}
                       </td>
-                      <td className="px-6 py-4 font-medium text-[#001f3f]">{s.interesadoNombre}</td>
+                      <td className="px-6 py-4 font-medium text-navy-950">{s.interesadoNombre}</td>
                       <td className="px-6 py-4">
                         <a 
                           href={`https://wa.me/${s.interesadoTelefono.replace(/[^0-9]/g, '')}`} 

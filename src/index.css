@@ -41,13 +41,13 @@
 
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center gap-2 px-6 py-3 bg-navy-600 text-white font-semibold rounded-2xl 
-           shadow-soft hover:bg-navy-700 hover:shadow-soft-lg active:scale-95 
+    @apply inline-flex items-center gap-2 px-6 py-3 bg-navy-950 text-white font-semibold rounded-2xl 
+           shadow-soft hover:bg-navy-900 hover:shadow-soft-lg active:scale-95 
            transition-all duration-200 text-sm;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center gap-2 px-6 py-3 bg-white text-navy-600 font-semibold 
+    @apply inline-flex items-center gap-2 px-6 py-3 bg-white text-navy-950 font-semibold 
            rounded-2xl border-2 border-brand-pink hover:bg-brand-light hover:shadow-soft 
            active:scale-95 transition-all duration-200 text-sm;
   }
@@ -70,7 +70,7 @@
   }
 
   .section-title {
-    @apply text-3xl md:text-4xl font-bold text-navy-600 leading-tight;
+    @apply text-3xl md:text-4xl font-bold text-navy-950 leading-tight;
   }
 
   .section-subtitle {
@@ -107,7 +107,7 @@
   }
 
   .text-gradient-navy {
-    @apply bg-gradient-to-r from-navy-600 to-navy-500 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-navy-950 to-navy-800 bg-clip-text text-transparent;
   }
 
   .animate-float {

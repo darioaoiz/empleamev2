@@ -7,7 +7,7 @@ import WhatsAppButton from './components/layout/WhatsAppButton'
 import Home from './pages/Home'
 import Forms from './pages/Forms'
 import Candidates from './pages/Candidates'
-import Academy from './pages/Academy'
+import Academia from './pages/Academia'
 import Payments from './pages/Payments'
 import Admin from './pages/Admin'
 import Login from './pages/Login'
@@ -40,7 +40,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/formularios" element={<Forms />} />
               <Route path="/postulantes" element={<Candidates />} />
-              <Route path="/academia" element={<Academy />} />
+              <Route path="/academia" element={<Academia />} />
               <Route path="/pagos" element={<Payments />} />
               <Route path="/login" element={<Login />} />
               <Route path="/registro" element={<Register />} />

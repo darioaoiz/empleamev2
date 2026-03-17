@@ -78,13 +78,13 @@ export default function Unete() {
           <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle2 className="w-12 h-12" />
           </div>
-          <h2 className="text-2xl font-black text-navy-600 mb-4">¡Solicitud Enviada!</h2>
+          <h2 className="text-2xl font-black text-navy-950 mb-4">¡Solicitud Enviada!</h2>
           <p className="text-gray-500 mb-6">
             Gracias por interesarte en formar parte de nuestro equipo. Revisaremos tu perfil y nos pondremos en contacto contigo pronto.
           </p>
           <button 
             onClick={() => navigate('/')}
-            className="w-full py-3 bg-pink-500 text-white font-bold rounded-xl hover:bg-pink-600 transition-colors"
+            className="w-full py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors"
           >
             Volver al Inicio
           </button>
@@ -102,7 +102,7 @@ export default function Unete() {
           className="bg-white p-8 md:p-12 rounded-3xl shadow-soft-lg border border-pink-100"
         >
           <div className="text-center mb-10">
-            <h1 className="text-3xl font-black text-navy-600">Trabaja con Nosotros</h1>
+            <h1 className="text-3xl font-black text-navy-950">Trabaja con Nosotros</h1>
             <p className="mt-2 text-gray-500">Completa el formulario para postularte como profesional en Empleame</p>
           </div>
 
@@ -252,7 +252,7 @@ export default function Unete() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-4 px-6 bg-pink-500 hover:bg-pink-600 text-white font-black rounded-2xl shadow-lg shadow-pink-200 transition-all hover:-translate-y-1 flex items-center justify-center gap-3 disabled:opacity-70 disabled:hover:translate-y-0"
+              className="w-full py-4 px-6 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-2xl shadow-lg shadow-blue-200 transition-all hover:-translate-y-1 flex items-center justify-center gap-3 disabled:opacity-70 disabled:hover:translate-y-0"
             >
               {loading ? (
                 <>

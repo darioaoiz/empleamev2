@@ -33,7 +33,7 @@ function AccountField({ label, value }) {
     <div className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
       <div>
         <p className="text-xs text-gray-400 font-medium">{label}</p>
-        <p className="text-sm font-bold text-navy-600 mt-0.5 font-mono">{value}</p>
+        <p className="text-sm font-bold text-navy-950 mt-0.5 font-mono">{value}</p>
       </div>
       <button
         onClick={handleCopy}
@@ -137,7 +137,7 @@ function BankCard({ bank }) {
               >
                 <X className="w-5 h-5" />
               </button>
-              <h3 className="font-bold text-navy-600 mb-2">{bank.name}</h3>
+              <h3 className="font-bold text-navy-950 mb-2">{bank.name}</h3>
               <p className="text-sm text-gray-500 mb-6">Escanea para transferir</p>
               
               {bank.qr ? (
@@ -152,7 +152,7 @@ function BankCard({ bank }) {
               
               <div className="mt-6 bg-pink-50 rounded-2xl p-4 border border-pink-100">
                 <p className="text-xs text-gray-500 mb-1">Cuenta destino</p>
-                <p className="font-mono font-bold text-navy-600">{bank.cuenta}</p>
+                <p className="font-mono font-bold text-navy-950">{bank.cuenta}</p>
                 <p className="text-xs text-gray-400 mt-1">{bank.titular}</p>
               </div>
             </motion.div>
@@ -179,7 +179,7 @@ export default function Payments() {
             <span className="inline-block px-3 py-1 bg-white text-pink-600 rounded-full text-xs font-semibold tracking-widest uppercase mb-4 shadow-card border border-pink-100">
               Pagos y Transferencias
             </span>
-            <h1 className="text-4xl md:text-5xl font-black text-navy-600 mb-4">
+            <h1 className="text-4xl md:text-5xl font-black text-navy-950 mb-4">
               Información de Pago
             </h1>
             <p className="text-gray-500 text-lg max-w-xl mx-auto">
@@ -204,7 +204,7 @@ export default function Payments() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h3 className="font-bold text-navy-600 mb-4 flex items-center gap-2">
+          <h3 className="font-bold text-navy-950 mb-4 flex items-center gap-2">
             <span className="text-xl">📋</span> Instrucciones de pago
           </h3>
           <ol className="space-y-3">
@@ -231,7 +231,7 @@ export default function Payments() {
               )}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-primary w-full justify-center"
+              className="flex items-center gap-2 w-full justify-center px-4 py-3 bg-green-500 hover:bg-green-600 text-white rounded-2xl font-bold transition-all shadow-md"
             >
               📱 Enviar comprobante por WhatsApp
             </a>

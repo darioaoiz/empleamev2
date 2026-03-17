@@ -57,7 +57,7 @@ function CandidateCard({ candidate, onViewCV, onInterest }) {
 
       {/* Content */}
       <div className="p-5 -mt-4 relative">
-        <h3 className="font-bold text-navy-600 text-base leading-tight">{candidate.nombre}</h3>
+        <h3 className="font-bold text-navy-950 text-base leading-tight">{candidate.nombre}</h3>
         <p className="text-pink-500 text-sm font-medium mt-0.5">{candidate.especialidad}</p>
 
         <div className="mt-3 space-y-1.5">
@@ -122,7 +122,7 @@ function CVModal({ candidate }) {
     <div className="flex flex-col h-full min-h-[500px]">
       <div className="p-4 bg-pink-50 border-b border-pink-100 flex-shrink-0">
         <p className="text-sm text-gray-600">
-          Hoja de vida de <strong className="text-navy-600">{candidate.nombre}</strong>
+          Hoja de vida de <strong className="text-navy-950">{candidate.nombre}</strong>
         </p>
       </div>
 
@@ -158,7 +158,7 @@ function CVModal({ candidate }) {
               onError={(e) => { e.currentTarget.src = fallbackAvatar }}
             />
           </div>
-          <h3 className="text-xl font-black text-navy-600 mb-1">{candidate.nombre}</h3>
+          <h3 className="text-xl font-black text-navy-950 mb-1">{candidate.nombre}</h3>
           <p className="text-pink-500 font-semibold mb-1">{candidate.especialidad}</p>
           <p className="text-gray-400 text-sm mb-6">{candidate.ciudad} · {candidate.modalidad}</p>
 
@@ -171,7 +171,7 @@ function CVModal({ candidate }) {
             ].map((item) => (
               <div key={item.label} className="bg-pink-50 rounded-xl p-3 text-center border border-pink-100">
                 <p className="text-xs text-gray-500">{item.label}</p>
-                <p className="font-bold text-navy-600 text-sm">{item.value}</p>
+                <p className="font-bold text-navy-950 text-sm">{item.value}</p>
               </div>
             ))}
           </div>
@@ -337,7 +337,7 @@ export default function Candidates() {
             <span className="inline-block px-3 py-1 bg-white text-pink-600 rounded-full text-xs font-semibold tracking-widest uppercase mb-4 shadow-card border border-pink-100">
               Catálogo de Talentos
             </span>
-            <h1 className="text-4xl md:text-5xl font-black text-navy-600 mb-4">
+            <h1 className="text-4xl md:text-5xl font-black text-navy-950 mb-4">
               Encuentra tu candidata ideal
             </h1>
             <p className="text-gray-500 text-lg max-w-xl mx-auto">
@@ -387,7 +387,7 @@ export default function Candidates() {
         {error && (
           <div className="text-center py-16">
             <p className="text-5xl mb-4">⚠️</p>
-            <h3 className="text-xl font-bold text-navy-600 mb-2">Error de conexión</h3>
+            <h3 className="text-xl font-bold text-navy-950 mb-2">Error de conexión</h3>
             <p className="text-gray-500 mb-6 max-w-sm mx-auto">{error}</p>
             <button onClick={handleRetry} className="btn-primary">
               <RefreshCw className="w-4 h-4" /> Reintentar
@@ -413,7 +413,7 @@ export default function Candidates() {
           <>
             <div className="flex items-center justify-between mb-6">
               <p className="text-sm text-gray-500">
-                <strong className="text-navy-600">{filtered.length}</strong> postulante{filtered.length !== 1 ? 's' : ''} encontrada{filtered.length !== 1 ? 's' : ''}
+                <strong className="text-navy-950">{filtered.length}</strong> postulante{filtered.length !== 1 ? 's' : ''} encontrada{filtered.length !== 1 ? 's' : ''}
               </p>
               {candidates.length === 0 && (
                 <span className="text-xs text-gray-400 bg-yellow-50 border border-yellow-200 px-3 py-1 rounded-full">
@@ -426,7 +426,7 @@ export default function Candidates() {
               /* Empty Firestore — show a helpful message */
               <div className="text-center py-24">
                 <p className="text-6xl mb-5">👩‍💼</p>
-                <h3 className="text-2xl font-black text-navy-600 mb-3">Catálogo en preparación</h3>
+                <h3 className="text-2xl font-black text-navy-950 mb-3">Catálogo en preparación</h3>
                 <p className="text-gray-500 max-w-sm mx-auto leading-relaxed">
                   Pronto publicaremos los perfiles de nuestras candidatas verificadas.<br />
                   ¿Tienes urgencia? Contáctanos directamente.
@@ -444,7 +444,7 @@ export default function Candidates() {
             ) : filtered.length === 0 ? (
               <div className="text-center py-20">
                 <p className="text-4xl mb-4">🔍</p>
-                <h3 className="text-xl font-bold text-navy-600 mb-2">Sin resultados</h3>
+                <h3 className="text-xl font-bold text-navy-950 mb-2">Sin resultados</h3>
                 <p className="text-gray-500">Intenta cambiar los filtros de búsqueda.</p>
                 <button
                   onClick={() => { setSearch(''); setCity('Todas las ciudades'); setModality('Todas las modalidades'); setSpecialty(ALL_SPECIALTIES) }}
@@ -508,7 +508,7 @@ function MembershipModal({ onClose, onAction }) {
           <div className="w-16 h-16 bg-pink-100 text-pink-500 rounded-full flex items-center justify-center mx-auto mb-6">
             <Lock className="w-8 h-8" />
           </div>
-          <h3 className="text-2xl font-black text-navy-600 mb-3">Contenido exclusivo</h3>
+          <h3 className="text-2xl font-black text-navy-950 mb-3">Contenido exclusivo</h3>
           <p className="text-gray-500 mb-8 leading-relaxed">
             Las hojas de vida son exclusivas para miembros de nuestra plataforma.
           </p>

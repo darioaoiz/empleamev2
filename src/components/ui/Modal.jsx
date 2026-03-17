@@ -36,7 +36,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' })
             {/* Header */}
             {title && (
               <div className="flex items-center justify-between px-6 py-4 border-b border-pink-100 bg-gradient-to-r from-pink-50 to-mauve-100/30 flex-shrink-0">
-                <h2 className="text-lg font-bold text-navy-600">{title}</h2>
+                <h2 className="text-lg font-bold text-navy-950">{title}</h2>
                 <button
                   onClick={onClose}
                   className="p-2 rounded-xl hover:bg-pink-100 text-gray-500 hover:text-gray-700 transition-colors"

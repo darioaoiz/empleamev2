@@ -16,7 +16,7 @@ export default function Footer() {
   const { instagram, facebook, linkedin, phone, email, address, whatsappNumber } = useSettings()
 
   return (
-    <footer className="bg-navy-600 text-white">
+    <footer className="bg-navy-950 text-white">
       {/* Wave divider */}
       <div className="w-full overflow-hidden leading-none">
         <svg viewBox="0 0 1440 40" className="w-full h-10 fill-gray-50">
